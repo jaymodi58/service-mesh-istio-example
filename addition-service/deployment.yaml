@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: addition-service
+  labels:
+    app: addition-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    name: http
+  selector:
+    app: addition-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: addition-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: addition-service
+        version: v1
+    spec:
+      containers:
+      - name: addition-service
+        image: us.gcr.io/service-mesh-istio-example/addition-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
